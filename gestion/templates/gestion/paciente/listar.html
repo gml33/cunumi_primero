@@ -1,0 +1,66 @@
+{% extends "gestion/layout.html" %} {% block body %} {% load crispy_forms_tags%}
+{% if pacientes %}
+
+<script>
+  function eliminarNetbook(id) {
+    Swal.fire({
+      title: "Confirmar Operación",
+      text: "Esta acción no se puede deshacer",
+      icon: "question",
+      showCancelButton: true,
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        window.location.href = "/eliminar-paciente/" + id + "/";
+      }
+    });
+  }
+</script>
+
+<div class="card">
+  <card class="card-body">
+    <h2>Pacientes</h2>
+    <hr />
+    <table class="table table-striped table-hover table-responsive-sm">
+      <tr>
+        <th>Nombre</th>
+        <th>Edad</th>
+        <th>Fecha Ingreso</th>
+        <th>Estado</th>
+        <th>Opciones</th>
+      </tr>
+      {% for paciente in pacientes %}
+      <tr>
+        <td>{{paciente.nombre}} {{paciente.apellido}}</td>
+        <td>{{paciente.edad}}</td>
+        <td>{{paciente.fecha_ingreso}}</td>
+        <td>{{paciente.estado}}</td>
+        <td>
+          <a
+            href="{% url 'gestion:detalle_paciente' paciente.id %}"
+            class="fas fa-eye"
+          ></a>
+          {% if perms.api.change_paciente %}
+          <a> - </a>
+          <a
+            href="{% url 'gestion:modificar_paciente' paciente.id %}"
+            class="fas fa-pen"
+          ></a>
+          {% endif %} {% if perms.api.delete_paciente %}
+          <a> - </a>
+          <a
+            href="#"
+            class="far fa-trash-alt"
+            onclick="eliminarPaciente({{paciente.id}})"
+          ></a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </card>
+</div>
+
+{% else %}
+<h2>No hay Pacientes registrados</h2>
+<br />
+{% endif %} {% endblock %}

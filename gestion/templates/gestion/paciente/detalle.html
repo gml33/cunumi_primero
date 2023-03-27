@@ -1,0 +1,153 @@
+{% extends "gestion/layout.html" %} {% block body %}
+
+<script>
+  function eliminarEvolucion(id) {
+    Swal.fire({
+      title: "Confirmar Operación",
+      text: "Esta acción no se puede deshacer",
+      icon: "question",
+      showCancelButton: true,
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        window.location.href = "/eliminar-evolucion/" + id + "/";
+      }
+    });
+  }
+</script>
+<script>
+  function eliminarhistoriaClinica(id) {
+    Swal.fire({
+      title: "Confirmar Operación",
+      text: "Esta acción no se puede deshacer",
+      icon: "question",
+      showCancelButton: true,
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        window.location.href = "/eliminar-historiaClinica/" + id + "/";
+      }
+    });
+  }
+</script>
+
+<div class="card">
+  <div class="card-body">
+    <h3 class="card-title"><center>Datos del paciente</center></h3>
+    <h5 class="card-title">
+      Nombre y Apellido: {{paciente.nombre}} {{paciente.apellido}}
+    </h5>
+    <div class="row">
+      <table class="table table-striped table-hover table-responsive-sm">
+        <tbody>
+          <tr>
+            <td>Edad</td>
+            <td>{{paciente.edad}}</td>
+          </tr>
+          <tr>
+            <td>Dni</td>
+            <td>{{paciente.dni}}</td>
+          </tr>
+          <tr>
+            <td>Fecha de Ingreso</td>
+            <td>{{paciente.fecha_ingreso}}</td>
+          </tr>
+          <tr>
+            <td>Telefono</td>
+            <td>{{paciente.telefono}}</td>
+          </tr>
+          <tr>
+            <td>Email</td>
+            <td>{{paciente.email}}</td>
+          </tr>
+          <tr>
+            <td>Estado</td>
+            <td>{{paciente.estado}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<br />
+{% if evoluciones %}
+<div class="card">
+  <card class="card-body">
+    <h2><center>Evoluciones</center></h2>
+    <br />
+    <table class="table table-striped table-hover table-responsive-sm">
+      <tr>
+        <th>Fecha</th>
+        <th>Detalle</th>
+        <th>Opciones</th>
+      </tr>
+      {% for evolucion in evoluciones %}
+      <tr>
+        <td>{{evolucion.fecha}}</td>
+        <td>{{evolucion.detalle | slice:"30"}}</td>
+        <td>
+          <a
+            href="{% url 'gestion:detalle_evolucion' evolucion.id %}"
+            class="fas fa-eye"
+          ></a>
+          {% if perms.gestion.change_evolucion %}
+          <a> - </a>
+          <a
+            href="{% url 'gestion:modificar_evolucion' evolucion.id %}"
+            class="fas fa-pen"
+          ></a>
+          {% endif %} {% if perms.gestion.delete_evolucion %}
+          <a> - </a>
+          <a
+            href="#"
+            class="far fa-trash-alt"
+            onclick="eliminarEvolucion({{evolucion.id}})"
+          ></a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </card>
+</div>
+<br />
+{% endif %} {% if hcs %}
+<div class="card">
+  <card class="card-body">
+    <h2><center>Historia clínica</center></h2>
+    <br />
+    <table class="table table-striped table-hover table-responsive-sm">
+      <tr>
+        <th>Fecha</th>
+        <th>Detalle</th>
+        <th>Opciones</th>
+      </tr>
+      {% for hc in hcs %}
+      <tr>
+        <td>{{hc.fecha}}</td>
+        <td>{{hc.detalle | slice:"30"}}</td>
+        <td>
+          <a
+            href="{% url 'gestion:detalle_historiaClinica' hc.id %}"
+            class="fas fa-eye"
+          ></a>
+          {% if perms.gestion.change_historiaClinica %}
+          <a> - </a>
+          <a
+            href="{% url 'gestion:modificar_historiaClinica' hc.id %}"
+            class="fas fa-pen"
+          ></a>
+          {% endif %} {% if perms.gestion.delete_historiaClinica %}
+          <a> - </a>
+          <a
+            href="#"
+            class="far fa-trash-alt"
+            onclick="eliminarhistoriaClinica({{hc.id}})"
+          ></a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </card>
+</div>
+
+{% endif %} {% endblock %}

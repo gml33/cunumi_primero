@@ -1,0 +1,22 @@
+{% extends "gestion/layout.html" %} {% block body %}
+<div class="container">
+  <div class="card">
+    <div class="card-body">
+      <h3 class="card-title">Detalle de la derivación</h3>
+      <h5 class="card-title">
+        Nombre: {{derivacion.paciente}} -- {{derivacion.fecha}}
+      </h5>
+      <div class="card-body">
+        <h3>Motivo:</h3>
+        <p>{{derivacion.motivo}}</p>
+        <br />
+        <h3>Profesional al que se deriva:</h3>
+        <p>{{derivacion.profesional}}</p>
+      </div>
+      <a href="{% url 'gestion:listar_derivaciones' %}" class="btn btn-success"
+        >Volver</a
+      >
+    </div>
+  </div>
+</div>
+{% endblock %}

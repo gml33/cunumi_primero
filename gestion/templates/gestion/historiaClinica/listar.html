@@ -1,0 +1,66 @@
+{% extends "gestion/layout.html" %} {% block body %} {% load crispy_forms_tags%}
+{% if historiaClinicas %}
+
+<script>
+  function eliminarhistoriaClinica(id) {
+    Swal.fire({
+      title: "Confirmar Operación",
+      text: "Esta acción no se puede deshacer",
+      icon: "question",
+      showCancelButton: true,
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        window.location.href = "/eliminar-historiaClinica/" + id + "/";
+      }
+    });
+  }
+</script>
+
+<div class="card">
+  <card class="card-body">
+    <h2><center>Historias Clínicas</center></h2>
+    <table class="table table-striped table-hover table-responsive-sm">
+      <tr>
+        <th>fecha</th>
+        <th>Paciente</th>
+        <th>Detalle</th>
+        <th>Opciones</th>
+      </tr>
+      {% for historiaClinica in historiaClinicas %}
+      <tr>
+        <td>{{historiaClinica.fecha}}</td>
+        <td>{{historiaClinica.paciente}}</td>
+        <td>{{historiaClinica.detalle | slice:'20'}}</td>
+        <td>
+          <a
+            href="{% url 'gestion:detalle_historiaClinica' historiaClinica.id %}"
+            class="fas fa-eye"
+          ></a>
+          {% if perms.gestion.change_historiaClinica %}
+          <a> - </a>
+          <a
+            href="{% url 'gestion:modificar_historiaClinica' historiaClinica.id %}"
+            class="fas fa-pen"
+          ></a>
+          {% endif %} {% if perms.gestion.delete_historiaClinica %}
+          <a> - </a>
+          <a
+            href="#"
+            class="far fa-trash-alt"
+            onclick="eliminarhistoriaClinica({{historiaClinica.id}})"
+          ></a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </card>
+</div>
+
+{% else %}
+<div class="card">
+  <card class="card-body">
+    <h2>No hay historiaClinicas registradas</h2>
+  </card>
+</div>
+{% endif %} {% endblock %}

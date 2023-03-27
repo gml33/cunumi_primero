@@ -1,0 +1,59 @@
+{% extends "gestion/layout.html" %} {% block body %} {% load crispy_forms_tags%}
+{% if evoluciones %}
+
+<script>
+  function eliminarEvolucion(id) {
+    Swal.fire({
+      icon: "question",
+      title: "Confirmar Operación",
+      text: "Esta acción no se puede deshacer",
+      showCancelButton: true,
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        window.location.href = "/eliminar-evolucion/" + id + "/";
+      }
+    });
+  }
+</script>
+
+<div class="card">
+  <card class="card-body">
+    <h2>Listado de Evoluciones</h2>
+    <hr />
+    <table class="table table-striped table-hover table-responsive-sm">
+      <tr>
+        <th>Fecha</th>
+        <th>Paciente</th>
+        <th>Opciones</th>
+      </tr>
+      {% for evolucion in evoluciones %}
+      <tr>
+        <td>{{evolucion.fecha}}</td>
+        <td>{{evolucion.paciente}}</td>
+        <td>
+          <a
+            href="{% url 'gestion:detalle_evolucion' evolucion.id%}"
+            class="fas fa-eye"
+          ></a>
+          {% if perms.gestion.delete_evolucion %}
+          <a> - </a>
+          <a
+            href="#"
+            class="far fa-trash-alt"
+            onclick="liminarEvolucion({{evolucion.id}})"
+          ></a>
+          {%endif%}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </card>
+</div>
+
+{% else %}
+<div class="card">
+  <card class="card-body">
+    <h2>No hay Evoluciones registradas</h2>
+  </card>
+</div>
+{% endif %} {% endblock %}

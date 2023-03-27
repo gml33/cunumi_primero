@@ -1,0 +1,67 @@
+{% extends "gestion/layout.html" %} {% block body %} {% load crispy_forms_tags%}
+{% if derivaciones %}
+
+<script>
+  function eliminarDerivacion(id) {
+    Swal.fire({
+      title: "Confirmar Operación",
+      text: "Esta acción no se puede deshacer",
+      icon: "question",
+      showCancelButton: true,
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        window.location.href = "/eliminar-derivacion/" + id + "/";
+      }
+    });
+  }
+</script>
+
+<div class="card">
+  <card class="card-body">
+    <h2><center>Listado de derivaciones</center></h2>
+    <table class="table table-striped table-hover table-responsive-sm">
+      <tr>
+        <th>Nombre y Apellido</th>
+        <th>fecha</th>
+        <th>motivo</th>
+        <th>Opciones</th>
+      </tr>
+      {% for derivacion in derivaciones %}
+      <tr>
+        <td>{{derivacion.paciente}}</td>
+        <td>{{derivacion.fecha}}</td>
+        <td>{{derivacion.motivo}}</td>
+        <td>
+          <a
+            href="{% url 'gestion:detalle_derivacion' derivacion.id %}"
+            class="fas fa-eye"
+          ></a>
+          {% if perms.gestion.change_derivacion %}
+          <a> - </a>
+          <a
+            href="{% url 'gestion:modificar_derivacion' derivacion.id %}"
+            class="fas fa-pen"
+          ></a>
+          {% endif %} {% if perms.gestion.delete_derivacion %}
+          <a> - </a>
+          <a
+            href="#"
+            class="far fa-trash-alt"
+            onclick="eliminarDerivacion({{derivacion.id}})"
+          ></a>
+
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </card>
+</div>
+
+{% else %}
+<div class="card">
+  <card class="card-body">
+    <h2>No hay derivaciones registradas</h2>
+  </card>
+</div>
+{% endif %} {% endblock %}

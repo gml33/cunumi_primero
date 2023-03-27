@@ -1,0 +1,19 @@
+{% extends "gestion/layout.html" %} {% block body %}
+<div class="container">
+  <div class="card">
+    <div class="card-body">
+      <h3 class="card-title">Detalle de la HC</h3>
+      <h5 class="card-title">
+        Nombre: {{historiaClinica.paciente}} -- {{historiaClinica.fecha}}
+      </h5>
+      <div class="card-body">
+        <h3>detalle:</h3>
+        <p>{{historiaClinica.detalle}}</p>        
+      </div>
+      <a href="{% url 'gestion:listar_historiaClinicas' %}" class="btn btn-success"
+        >Volver</a
+      >
+    </div>
+  </div>
+</div>
+{% endblock %}
